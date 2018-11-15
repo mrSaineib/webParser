@@ -3,6 +3,7 @@ package pl.codesto;
 import pl.codesto.parser.OurPlaceParser;
 import pl.codesto.parser.Parser;
 import pl.codesto.parser.cdm.Lunch;
+import pl.codesto.parser.cdm.Restaurant;
 import pl.codesto.provider.PageProvider;
 import pl.codesto.target.Endpoint;
 
@@ -25,10 +26,11 @@ public class App
         }
 
         Parser parser = new OurPlaceParser();
-        List<Lunch> lunches = parser.parsePage(pp);
+        Restaurant res = parser.parsePage(pp);
 
-        for (int i=0; i<lunches.size(); i++) {
-            Lunch lunch = lunches.get(i);
+        System.out.println(res.getName());
+        for (int i=0; i<res.getLunchList().size(); i++) {
+            Lunch lunch = res.getLunchList().get(i);
             System.out.println("Propozycja " + (i + 1) + ".");
             System.out.println("\tZupa: " + lunch.getSoup());
             System.out.println("\tDrugi danie: " + lunch.getMainCourse());
@@ -36,6 +38,10 @@ public class App
         }
 
 
+    }
+
+    public static void printTitle(String title) {
+        int strSize = title.length();
     }
 
 }

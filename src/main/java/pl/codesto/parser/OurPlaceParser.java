@@ -2,6 +2,7 @@ package pl.codesto.parser;
 
 import org.jsoup.select.Elements;
 import pl.codesto.parser.cdm.Lunch;
+import pl.codesto.parser.cdm.Restaurant;
 import pl.codesto.provider.PageProvider;
 
 import java.math.BigDecimal;
@@ -10,20 +11,22 @@ import java.util.List;
 
 public class OurPlaceParser implements Parser {
 
-    public List<Lunch> parsePage(PageProvider provider) {
+    public Restaurant parsePage(PageProvider provider) {
         Elements priceElements = provider.getElements(".entry p strong:contains(zł)");
         Elements soupElements = provider.getElements(".entry p em");
         Elements mainCourseElements = provider.getElements(".entry p:containsOwn(,)");
 
-        List<Lunch> result = new ArrayList<Lunch>();
+        List<Lunch> lunches = new ArrayList<Lunch>();
         for (int i = 0; i < priceElements.size(); i++) {
             String soupStr = soupElements.get(i).html();
             String mainCourseStr = mainCourseElements.get(i).html();
             BigDecimal price = BigDecimal.valueOf(extractNumFormString(priceElements.get(i).html()));
-            result.add(new Lunch(price, soupStr, mainCourseStr));
+            lunches.add(new Lunch(price, soupStr, mainCourseStr));
         }
 
-        return result;
+        Restaurant restaurant = new Restaurant(provider.getPageTitle(), lunches);
+
+        return restaurant;
     }
 
     private int extractNumFormString(String str) {
